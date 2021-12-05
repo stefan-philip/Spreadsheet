@@ -14,6 +14,7 @@ interface ControllerProps {
 
 const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
   const [selected, setSelected] = useState(["A", 1]);
+  const [numTimesEnterHit, setNumTimesEnterHit] = useState(0);
 
   useEffect(() => {
     console.log("model changed");
@@ -21,6 +22,7 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
 
   function handleFormulaChange(newFormula : string) {
     try {
+      setNumTimesEnterHit(numTimesEnterHit + 1);
       model.updateCellFormula(new CellReference(selected[1] as number, selected[0] as string), newFormula);
     }
     catch (e) {
@@ -47,7 +49,8 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
                     handleFormulaChange={handleFormulaChange}/>
         <Table model={model}
                selected={selected}
-               handleCellClick={handleCellClick}/>
+               handleCellClick={handleCellClick}
+               numTimesEnterHit={numTimesEnterHit}/>
       </>
   );
 }

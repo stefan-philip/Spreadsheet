@@ -5,7 +5,7 @@ import {SumVisitor} from "./SumVisitor";
 
 export class AverageVisitor implements SpreadsheetModelVisitor {
 
-  private range : RangeExpression;
+  private readonly range : RangeExpression;
   private result : number;
 
   constructor(range : RangeExpression) {
@@ -38,7 +38,7 @@ export class AverageVisitor implements SpreadsheetModelVisitor {
       }
     }
 
-    if (nonEmptyTerms == 0) {
+    if (nonEmptyTerms === 0) {
       throw new Error("Divide by zero error");
     }
 

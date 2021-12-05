@@ -20,8 +20,8 @@ export class SpreadsheetModel implements ISpreadsheetModel{
   constructor() {
     this.cellMap = new Map<string, Cell>();
     this.cellDependencies = new Map<CellReference, CellReference[]>();
-    this.numColumns = 20;
-    this.numRows = 50;
+    this.numColumns = 12;
+    this.numRows = 25;
     this.parser = new FormulaParser();
     this.initializeCells();
   }

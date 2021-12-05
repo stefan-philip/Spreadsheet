@@ -1,5 +1,4 @@
 import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
-import {Cell} from "./Cell";
 import {letterToColumnIndex} from "../util/utils";
 
 export interface ISpreadsheetModel {
@@ -54,7 +53,7 @@ export class CellReference {
         break;
       }
     }
-    if (isNaN(parseInt(row)) || col.length == 0) {
+    if (isNaN(parseInt(row)) || col.length === 0) {
       throw new Error("Invalid cell reference");
     }
     return new CellReference(parseInt(row), col);

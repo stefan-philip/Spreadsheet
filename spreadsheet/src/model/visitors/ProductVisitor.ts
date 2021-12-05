@@ -5,7 +5,7 @@ import {columnIndexToLetter, letterToColumnIndex} from "../../util/utils";
 
 export class ProductVisitor implements SpreadsheetModelVisitor {
 
-  private range : RangeExpression;
+  private readonly range : RangeExpression;
   private result : number;
 
   constructor(range : RangeExpression) {

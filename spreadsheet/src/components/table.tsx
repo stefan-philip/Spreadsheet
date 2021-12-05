@@ -1,6 +1,6 @@
 import React, {ReactElement} from 'react';
 import styled from "styled-components";
-import {ISpreadsheetModel} from "../model/ISpreadsheetModel";
+import {ISpreadsheetModel, CellReference} from "../model/ISpreadsheetModel";
 import Cell from "./cell";
 import {columnIndexToLetter} from "../util/utils";
 
@@ -60,9 +60,10 @@ interface TableProps {
   model : ISpreadsheetModel;
   selected : (string | number)[];
   handleCellClick: (rowNumber : number, columnLetter : string) => void;
+  numTimesEnterHit : number;
 }
 
-const Table = ({model, selected, handleCellClick} : TableProps) : ReactElement => {
+const Table = ({model, selected, handleCellClick, numTimesEnterHit} : TableProps) : ReactElement => {
 
     let nums = Array.from({length: model.getNumberOfRows()}, (_, i) => i + 1);
     let cols = Array.from({length: model.getNumberOfColumns()}, (_, i) => i + 1);
@@ -73,15 +74,16 @@ const Table = ({model, selected, handleCellClick} : TableProps) : ReactElement =
 
 
   function buildRows(selected : (string | number)[]) : ReactElement[] {
-    let t = cols.map((num) => {
-      return " ";
-    });
-
     return nums.map((num) => {
+
+      let data = cols.map((columnNumber) => {
+        return model.getCellValue(new CellReference(num, columnIndexToLetter(columnNumber)));
+      });
+
       return (<Row key={num}
                     rowNumber={num}
                     numberOfColumns={model.getNumberOfColumns()}
-                    rowData={t}
+                    rowData={data}
                     selected={selected}
                     handleCellClick={handleCellClick}/>);
     });

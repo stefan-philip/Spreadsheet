@@ -14,11 +14,9 @@ export class FormulaParser {
       return "";
     }
 
-
     // SUM AVG PROD should always contain range expression
     // REF should always have cell reference
     //    replace REF with cell value
-
 
     // 1 + REF(A1) + 7 * SUM(A2..B5)
     const config = { }
@@ -27,7 +25,7 @@ export class FormulaParser {
     let formulaCopy = this.replaceAllReferences(formula, model);
     formulaCopy = this.replaceAllFunctions(formulaCopy, model);
     let res = math.evaluate(formulaCopy);
-    return res || "wrong";
+    return res !== undefined ? res : "wrong";
   }
 
   private replaceAllFunctions(formula : string, model : SpreadsheetModel) : string {
