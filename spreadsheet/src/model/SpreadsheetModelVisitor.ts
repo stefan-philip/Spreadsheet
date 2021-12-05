@@ -1,6 +1,6 @@
-import {SpreadsheetModel} from "./SpreadsheetModel";
+import {ISpreadsheetModel} from "./ISpreadsheetModel";
 
 // Interface for Visitor pattern
 export interface SpreadsheetModelVisitor {
-  visitModel(model : SpreadsheetModel) : void;
+  visitModel(model : ISpreadsheetModel) : void;
 }

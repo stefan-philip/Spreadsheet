@@ -16,6 +16,13 @@ export class Cell implements IObserver, ISubject {
     this.style = new CellStyle(new RGBColor(255, 255, 255));
   }
 
+  setFormula(formula : string) : void {
+    // do formula valuation
+    this.formula = formula;
+    this.value = formula;
+    this.notifyObservers();
+  }
+
   attach(observer : IObserver) {this.dependents.add(observer);}
   detach(observer: IObserver) {this.dependents.delete(observer);}
 
@@ -35,7 +42,7 @@ export class Cell implements IObserver, ISubject {
   getValue() : string | number { return this.value };
   getStyle() : CellStyle { return this.style };
 
-  updateStyle(style : CellStyle) {this.style = style;}
+  setStyle(style : CellStyle) {this.style = style;}
 
 }
 

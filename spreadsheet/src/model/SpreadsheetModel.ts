@@ -4,7 +4,7 @@ import {
   ISpreadsheetModel,
 } from "./ISpreadsheetModel";
 import {Cell} from "./Cell";
-import {columnIndexToLetter} from "../util/utils";
+import {columnIndexToLetter, letterToColumnIndex} from "../util/utils";
 import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
 
 export class SpreadsheetModel implements ISpreadsheetModel{
@@ -60,5 +60,95 @@ export class SpreadsheetModel implements ISpreadsheetModel{
 
   accept(visitor: SpreadsheetModelVisitor): void {visitor.visitModel(this);}
 
+  addColumnToLeft(columnIndex: string): void {
+    const colNum = letterToColumnIndex(columnIndex);
 
+    if (colNum < 1 || colNum > this.numColumns) {
+      throw new Error("Invalid column index");
+    }
+
+    let newMap = new Map<CellReference, Cell>();
+
+    this.cellMap.forEach((cell : Cell, ref : CellReference) => {
+      const refColNumber = letterToColumnIndex(ref.getColumn());
+
+      if (refColNumber >= colNum) {
+        newMap.set(new CellReference(ref.getRow(), columnIndexToLetter(refColNumber + 1)), cell);
+      }
+      else {
+        newMap.set(ref, cell);
+      }
+    })
+
+    for (let i = 1; i <= this.numRows; i++) {
+      newMap.set(new CellReference(i, columnIndex), new Cell());
+    }
+
+
+
+    this.cellMap = newMap;
+    this.numColumns++;
+
+    // TODO update dependencies?
+    //TODO update cell values?
+  }
+
+  addRowAbove(rowIndex: number): void {
+    if (rowIndex < 1 || rowIndex > this.numRows) {
+      throw new Error("Invalid row index");
+    }
+
+    let newMap = new Map<CellReference, Cell>();
+
+    this.cellMap.forEach((cell : Cell, ref : CellReference) => {
+      if (ref.getRow() >= rowIndex) {
+        newMap.set(new CellReference(ref.getRow() + 1, ref.getColumn()), cell);
+      }
+      else {
+        newMap.set(ref, cell);
+      }
+    })
+
+    for (let i = 1; i <= this.numColumns; i++) {
+      newMap.set(new CellReference(rowIndex, columnIndexToLetter(i)), new Cell());
+    }
+    this.cellMap = newMap;
+    this.numRows++;
+
+    // TODO update dependencies?
+    //TODO update cell values?
+  }
+
+  removeColumn(columnIndex: string): void {
+
+  }
+
+  removeRow(rowIndex: number): void {
+
+  }
+
+  clearCell(reference: CellReference): void {
+    this.validateCellReference(reference);
+    this.cellMap.set(reference, new Cell());
+    this.cellDependencies.set(reference, []);
+  }
+
+  updateCellFormula(reference: CellReference, formula: string): void {
+    this.validateCellReference(reference);
+    this.cellMap.get(reference)?.setFormula(formula);
+  }
+
+  updateCellStyle(reference: CellReference, style: CellStyle): void {
+    this.validateCellReference(reference);
+    this.cellMap.get(reference)?.setStyle(style);
+  }
+
+  private validateCellReference(ref : CellReference) : void {
+    if (ref.getRow() < 1 || ref.getRow() > this.numRows) {
+      throw new Error("Invalid Cell: bad row");
+    }
+    if (letterToColumnIndex(ref.getColumn()) < 1 || letterToColumnIndex(ref.getColumn()) > this.numColumns) {
+      throw new Error("Invalid Cell: bad column");
+    }
+  }
 }

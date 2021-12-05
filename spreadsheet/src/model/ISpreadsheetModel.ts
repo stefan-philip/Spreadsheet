@@ -1,3 +1,5 @@
+import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
+
 export interface ISpreadsheetModel {
 
   // Methods to query size information for the spreadsheet
@@ -35,6 +37,10 @@ export class CellReference {
     this.row = row;
     this.column = column;
   }
+
+  getRow() : number {return this.row;}
+  getColumn() : string {return this.column;}
+
 }
 
 // Represents the styling of a cell
