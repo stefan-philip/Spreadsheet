@@ -1,9 +1,10 @@
-import {CellReference, RangeExpression} from "./ISpreadsheetModel";
 import {SpreadsheetModel} from "./SpreadsheetModel";
 import {SumVisitor} from "./visitors/SumVisitor";
 import {ProductVisitor} from "./visitors/ProductVisitor";
 import {AverageVisitor} from "./visitors/AverageVisitor";
 import {all, create} from "mathjs";
+import {CellReference} from "./CellReference";
+import {RangeExpression} from "./RangeExpression";
 
 export class FormulaParser {
 

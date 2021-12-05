@@ -1,12 +1,13 @@
 import {
-  CellReference,
-  CellStyle,
-  ISpreadsheetModel, RangeExpression,
+  ISpreadsheetModel,
 } from "./ISpreadsheetModel";
 import {Cell} from "./Cell";
 import {columnIndexToLetter, letterToColumnIndex} from "../util/utils";
 import {SpreadsheetModelVisitor} from "./visitors/SpreadsheetModelVisitor";
 import {FormulaParser} from "./FormulaParser";
+import {CellReference} from "./CellReference";
+import {RangeExpression} from "./RangeExpression";
+import {CellStyle} from "./CellStyle";
 
 export class SpreadsheetModel implements ISpreadsheetModel{
   private cellMap : Map<string, Cell>;

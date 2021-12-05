@@ -1,4 +1,4 @@
-import {CellStyle, RGBColor} from "./ISpreadsheetModel";
+import {CellStyle, RGBColor} from "./CellStyle";
 
 export class Cell implements IObserver, ISubject {
 

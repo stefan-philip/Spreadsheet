@@ -1,7 +1,9 @@
 import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
-import {CellReference, ISpreadsheetModel, RangeExpression} from "../ISpreadsheetModel";
+import {ISpreadsheetModel} from "../ISpreadsheetModel";
 import {columnIndexToLetter, letterToColumnIndex} from "../../util/utils";
 import {SumVisitor} from "./SumVisitor";
+import {CellReference} from "../CellReference";
+import {RangeExpression} from "../RangeExpression";
 
 export class AverageVisitor implements SpreadsheetModelVisitor {
 
