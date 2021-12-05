@@ -1,8 +1,10 @@
 import React from 'react';
+import SpreadsheetController from "./components/SpreadsheetController";
+import {SpreadsheetModel} from "./model/SpreadsheetModel";
 
 function App() {
   return (
-      <p>stefan</p>
+      <SpreadsheetController model={new SpreadsheetModel()}/>
   );
 }
 
