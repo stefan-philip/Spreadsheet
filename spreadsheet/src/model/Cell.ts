@@ -1,0 +1,50 @@
+import {CellStyle, RGBColor} from "./ISpreadsheetModel";
+
+export class Cell implements IObserver, ISubject {
+
+  private dependents : Set<IObserver>;
+
+  private value : string | number;
+  private formula : string;
+  private style : CellStyle;
+
+
+  constructor() {
+    this.dependents = new Set<IObserver>();
+    this.value = "";
+    this.formula = "";
+    this.style = new CellStyle(new RGBColor(255, 255, 255));
+  }
+
+  attach(observer : IObserver) {this.dependents.add(observer);}
+  detach(observer: IObserver) {this.dependents.delete(observer);}
+
+  notifyObservers() {
+    this.dependents.forEach(d => {
+      d.update();
+    })
+  }
+
+  update() {
+    //TODO
+  }
+
+
+
+  getFormula() : string { return this.formula };
+  getValue() : string | number { return this.value };
+  getStyle() : CellStyle { return this.style };
+
+  updateStyle(style : CellStyle) {this.style = style;}
+
+}
+
+interface IObserver {
+  update() : void;
+}
+
+interface ISubject {
+  attach(observer : IObserver) : void;
+  detach(observer : IObserver) : void;
+  notifyObservers() : void;
+}
