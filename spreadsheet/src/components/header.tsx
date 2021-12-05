@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {Button} from "antd";
 
 const HeaderContainer = styled.div`
+
   width: 100%;
   background-color: #f5f5f5;
   display: flex;
@@ -34,7 +35,7 @@ const Header = () : ReactElement => {
       <HeaderContainer>
         <h3>Spreadsheet</h3>
         <ButtonContainer>
-          <MenuButton>Clear</MenuButton>
+          <MenuButton>Clear Cell</MenuButton>
           <MenuButton>Cell Background</MenuButton>
           <MenuButton>Add Row</MenuButton>
           <MenuButton>Add Column</MenuButton>

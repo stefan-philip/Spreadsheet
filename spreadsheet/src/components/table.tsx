@@ -29,18 +29,20 @@ interface RowProps {
   numberOfColumns : number;
   rowData : string[] | number[];
   className?: string;
+  selected: (string | number)[];
+  handleCellClick: (rowNumber : number, columnLetter : string) => void;
 }
 
 
 
-const Row = ({rowNumber, numberOfColumns, rowData, className} : RowProps) : ReactElement => {
+const Row = ({rowNumber, numberOfColumns, rowData, className, selected, handleCellClick} : RowProps) : ReactElement => {
   return (
     <RowContainer className={className}>
-      <RowNumber text={rowNumber ? rowNumber+"" : ""}/>
+      <RowNumber handleCellClick={handleCellClick} text={rowNumber ? rowNumber+"" : ""} selected={selected} rowIndex={rowNumber || 0} columnLetter={""}/>
 
-      {rowData.map(data => {
-        return <Cell text={data + ""}/>
-       })}
+      {rowData.map((data, index) => {
+        return <Cell handleCellClick={handleCellClick} text={data + ""} selected={selected} rowIndex={rowNumber || 0} columnLetter={columnIndexToLetter(index+1)}/>
+      })}
     </RowContainer>
 
   );
@@ -56,19 +58,21 @@ const ColumnHeader = styled(Row)`
 
 interface TableProps {
   model : ISpreadsheetModel;
+  selected : (string | number)[];
+  handleCellClick: (rowNumber : number, columnLetter : string) => void;
 }
 
-const Table = ({model} : TableProps) : ReactElement => {
+const Table = ({model, selected, handleCellClick} : TableProps) : ReactElement => {
 
     let nums = Array.from({length: model.getNumberOfRows()}, (_, i) => i + 1);
-let cols = Array.from({length: model.getNumberOfColumns()}, (_, i) => i + 1);
+    let cols = Array.from({length: model.getNumberOfColumns()}, (_, i) => i + 1);
 
      let columnNames = cols.map((num) => {
           return columnIndexToLetter(num);
         });
 
 
-  function buildRows() : ReactElement[] {
+  function buildRows(selected : (string | number)[]) : ReactElement[] {
     let t = cols.map((num) => {
       return " ";
     });
@@ -77,15 +81,19 @@ let cols = Array.from({length: model.getNumberOfColumns()}, (_, i) => i + 1);
       return (<Row key={num}
                     rowNumber={num}
                     numberOfColumns={model.getNumberOfColumns()}
-                    rowData={t}/>);
+                    rowData={t}
+                    selected={selected}
+                    handleCellClick={handleCellClick}/>);
     });
   }
 
   return (
       <TableContainer>
        <ColumnHeader numberOfColumns = {model.getNumberOfColumns()}
-                     rowData={columnNames}/>
-        {buildRows()}
+                     rowData={columnNames}
+                     selected={selected}
+                     handleCellClick={handleCellClick}/>
+        {buildRows(selected)}
       </TableContainer>
   );
 }
