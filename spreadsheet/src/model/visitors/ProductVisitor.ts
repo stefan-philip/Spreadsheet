@@ -1,4 +1,4 @@
-import {SpreadsheetModelVisitor} from "../SpreadsheetModelVisitor";
+import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
 import {CellReference, ISpreadsheetModel, RangeExpression} from "../ISpreadsheetModel";
 import { create, all } from 'mathjs'
 import {columnIndexToLetter, letterToColumnIndex} from "../../util/utils";

@@ -1,4 +1,4 @@
-import {ISpreadsheetModel} from "./ISpreadsheetModel";
+import {ISpreadsheetModel} from "../ISpreadsheetModel";
 
 // Interface for Visitor pattern
 export interface SpreadsheetModelVisitor {

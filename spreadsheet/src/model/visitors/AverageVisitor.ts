@@ -1,4 +1,4 @@
-import {SpreadsheetModelVisitor} from "../SpreadsheetModelVisitor";
+import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
 import {CellReference, ISpreadsheetModel, RangeExpression} from "../ISpreadsheetModel";
 import {columnIndexToLetter, letterToColumnIndex} from "../../util/utils";
 import {SumVisitor} from "./SumVisitor";

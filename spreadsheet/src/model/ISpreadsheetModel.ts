@@ -1,4 +1,4 @@
-import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
+import {SpreadsheetModelVisitor} from "./visitors/SpreadsheetModelVisitor";
 import {letterToColumnIndex} from "../util/utils";
 
 export interface ISpreadsheetModel {

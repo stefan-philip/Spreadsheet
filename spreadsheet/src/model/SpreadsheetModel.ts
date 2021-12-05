@@ -5,7 +5,7 @@ import {
 } from "./ISpreadsheetModel";
 import {Cell} from "./Cell";
 import {columnIndexToLetter, letterToColumnIndex} from "../util/utils";
-import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
+import {SpreadsheetModelVisitor} from "./visitors/SpreadsheetModelVisitor";
 import {FormulaParser} from "./FormulaParser";
 
 export class SpreadsheetModel implements ISpreadsheetModel{
