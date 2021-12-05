@@ -48,7 +48,7 @@ const Row = ({rowNumber, numberOfColumns, rowData, className} : RowProps) : Reac
 
 const ColumnHeader = styled(Row)`
   background-color: rgba(0, 0, 0, .2);
-
+  margin-top: 10px;
   > div {
       background-color: rgba(0, 0, 0, .2);
     }
@@ -61,14 +61,15 @@ interface TableProps {
 const Table = ({model} : TableProps) : ReactElement => {
 
     let nums = Array.from({length: model.getNumberOfRows()}, (_, i) => i + 1);
+let cols = Array.from({length: model.getNumberOfColumns()}, (_, i) => i + 1);
 
-     let columnNames = nums.map((num) => {
+     let columnNames = cols.map((num) => {
           return columnIndexToLetter(num);
         });
 
 
   function buildRows() : ReactElement[] {
-    let t = nums.map((num) => {
+    let t = cols.map((num) => {
       return " ";
     });
 
