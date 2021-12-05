@@ -35,6 +35,7 @@ const Header = () : ReactElement => {
       <HeaderContainer>
         <h3>Spreadsheet</h3>
         <ButtonContainer>
+          <MenuButton>Export</MenuButton>
           <MenuButton>Clear Cell</MenuButton>
           <MenuButton>Cell Background</MenuButton>
           <MenuButton>Add Row</MenuButton>
