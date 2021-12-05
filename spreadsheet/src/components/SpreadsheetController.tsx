@@ -18,7 +18,7 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
   const [numTimesEnterHit, setNumTimesEnterHit] = useState(0);
 
   useEffect(() => {
-    console.log("model changed");
+
   }, [model])
 
   function handleFormulaChange(newFormula : string) {

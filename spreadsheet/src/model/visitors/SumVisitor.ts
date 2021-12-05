@@ -31,15 +31,11 @@ export class SumVisitor implements SpreadsheetModelVisitor {
       for (let row = startRowIndex; row <= endRowIndex; row++) {
         let ref = new CellReference(row, columnIndexToLetter(col));
         let v = model.getCellValue(ref);
-        console.log(v + ": "+v.length);
         if (v.length > 0) {
-          console.log("should be here")
           vals.push(v);
         }
       }
     }
-
-    console.log(vals);
 
     let expression = "";
 
@@ -49,7 +45,7 @@ export class SumVisitor implements SpreadsheetModelVisitor {
         expression = expression.concat("+");
       }
     }
-  console.log("Expression: " + expression);
+
     let r = math.evaluate(expression);
     if (r === undefined) {
       throw new Error("Invalid values in range");
