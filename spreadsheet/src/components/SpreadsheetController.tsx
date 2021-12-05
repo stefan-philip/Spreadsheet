@@ -2,7 +2,7 @@ import React, {ReactElement, useEffect, useState} from 'react';
 import {ISpreadsheetModel} from "../model/ISpreadsheetModel";
 import Header from "./header";
 import FormulaBox from "./formulaBox";
-import Table from "./table";
+import Table from "./tableComponent";
 import {letterToColumnIndex} from "../util/utils";
 import {CellReference} from "../model/CellReference";
 

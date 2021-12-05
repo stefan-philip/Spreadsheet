@@ -143,7 +143,7 @@ export class SpreadsheetModel implements ISpreadsheetModel{
   updateCellFormula(reference: CellReference, formula: string): void {
     this.validateCellReference(reference);
     let value = this.parser.parseFormula(formula, this, reference);
-    console.log(reference.toString() + ": " + value);
+
     this.cellMap.get(reference.toString())?.setFormula(formula);
     this.cellMap.get(reference.toString())?.setValue(value);
   }
