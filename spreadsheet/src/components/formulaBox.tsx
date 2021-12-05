@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useEffect, useState} from 'react';
 import styled from "styled-components";
 import {Button} from "antd";
 
@@ -27,12 +27,33 @@ const FormulaBoxContainer = styled.div`
   flex-direction: row;
 `
 
-const FormulaBox = () : ReactElement => {
-  return (
-      <FormulaBoxContainer>
+interface FormulaBoxProps {
+  handleFormulaChange: (newFormula : string) => void;
+  selected : (string | number)[];
+  getSelectedFormula(selectedPair : (string | number)[]) : string
+}
 
-        <TextBox type={'text'}/>
-        <MenuButton>Enter</MenuButton>
+const FormulaBox = ({handleFormulaChange, getSelectedFormula, selected} : FormulaBoxProps) : ReactElement => {
+
+  let [formula, setFormula] = useState(getSelectedFormula(selected));
+  let [lastSelected, setLastSelected] = useState(["A", 1]);
+
+  useEffect(() => {
+    if (selected !== lastSelected) {
+      setLastSelected(selected);
+      setFormula(getSelectedFormula(selected));
+    }
+  }, [selected])
+
+  return (
+
+      <FormulaBoxContainer>
+        <TextBox onChange={(event) => {setFormula(event.target.value)}}
+                       type={'text'}
+                       value={
+                         lastSelected === selected ? formula : getSelectedFormula(selected)}/>
+
+        <MenuButton onClick={()=>handleFormulaChange(formula)}>Enter</MenuButton>
 
       </FormulaBoxContainer>
   );

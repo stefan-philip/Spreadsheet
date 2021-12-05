@@ -4,7 +4,7 @@ export class Cell implements IObserver, ISubject {
 
   private dependents : Set<IObserver>;
 
-  private value : string | number;
+  private value : string;
   private formula : string;
   private style : CellStyle;
 
@@ -19,7 +19,12 @@ export class Cell implements IObserver, ISubject {
   setFormula(formula : string) : void {
     // do formula valuation
     this.formula = formula;
-    this.value = formula;
+    this.notifyObservers();// TODO:update dependencies
+  }
+
+  setValue(value : string) : void {
+    // do formula valuation
+    this.value = value;
     this.notifyObservers();
   }
 
@@ -39,7 +44,7 @@ export class Cell implements IObserver, ISubject {
 
 
   getFormula() : string { return this.formula };
-  getValue() : string | number { return this.value };
+  getValue() : string { return this.value };
   getStyle() : CellStyle { return this.style };
 
   setStyle(style : CellStyle) {this.style = style;}

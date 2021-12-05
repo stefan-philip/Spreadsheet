@@ -1,4 +1,6 @@
 import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
+import {Cell} from "./Cell";
+import {letterToColumnIndex} from "../util/utils";
 
 export interface ISpreadsheetModel {
 
@@ -8,8 +10,8 @@ export interface ISpreadsheetModel {
 
   // Methods to query cell specific information
   // Based on CellReference (location) of specific cell
-  getCellValue(reference : CellReference) : string | number; // derived from cell formula
-  getCellFormula(reference : CellReference) : string | number;
+  getCellValue(reference : CellReference) : string; // derived from cell formula
+  getCellFormula(reference : CellReference) : string;
   getCellStyle(reference : CellReference) : CellStyle;
 
   // Methods to update cell information
@@ -38,9 +40,69 @@ export class CellReference {
     this.column = column;
   }
 
+  static createCellReference(refString : string) : CellReference {
+    let col = "";
+    let row = "";
+
+    for (let i = 0; i < refString.length; i++) {
+      let c = refString.charAt(i);
+      if (c.toLowerCase() !== c.toUpperCase()) {
+        col = col + c;
+      }
+      else {
+        row = refString.substring(i);
+        break;
+      }
+    }
+    if (isNaN(parseInt(row)) || col.length == 0) {
+      throw new Error("Invalid cell reference");
+    }
+    return new CellReference(parseInt(row), col);
+  }
+
+  toString() : string {
+    return this.getColumn() + this.getRow();
+  }
+
   getRow() : number {return this.row;}
   getColumn() : string {return this.column;}
 
+}
+
+export class RangeExpression {
+  private startRef : CellReference;
+  private endRef : CellReference;
+
+  constructor(startRef : CellReference, endRef : CellReference) {
+    this.startRef = startRef;
+    this.endRef = endRef;
+  }
+
+  getStartRef() : CellReference {return this.startRef;}
+  getEndRef() : CellReference {return this.endRef;}
+
+  static createRangeExpression(rangeString : string) : RangeExpression {
+    if (!rangeString.includes("..")) {
+      throw new Error("Invalid range expression");
+    }
+
+    let rangeSplit = rangeString.split("..");
+    if (rangeSplit.length !== 2) {
+      throw new Error("Invalid range expression");
+    }
+
+    let start = CellReference.createCellReference(rangeSplit[0]);
+    let end = CellReference.createCellReference(rangeSplit[1]);
+
+    if (letterToColumnIndex(end.getColumn()) < letterToColumnIndex(start.getColumn())) {
+      throw new Error("Invalid range expression");
+    }
+
+    if (end.getRow() < start.getRow()) {
+      throw new Error("Invalid range expression");
+    }
+    return new RangeExpression(start, end);
+  }
 }
 
 // Represents the styling of a cell
