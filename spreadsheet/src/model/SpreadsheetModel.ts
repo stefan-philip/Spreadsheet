@@ -2,10 +2,10 @@ import {
   CellReference,
   CellStyle,
   ISpreadsheetModel,
-  SpreadsheetModelVisitor
 } from "./ISpreadsheetModel";
 import {Cell} from "./Cell";
 import {columnIndexToLetter} from "../util/utils";
+import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
 
 export class SpreadsheetModel implements ISpreadsheetModel{
   private cellMap : Map<CellReference, Cell>;

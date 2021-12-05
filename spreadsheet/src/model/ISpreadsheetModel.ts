@@ -37,11 +37,6 @@ export class CellReference {
   }
 }
 
-// Interface for Visitor pattern
-export interface SpreadsheetModelVisitor {
-  visitModel(model : SpreadsheetModel) : void;
-}
-
 // Represents the styling of a cell
 export class CellStyle {
   private backgroundColor : Color;
