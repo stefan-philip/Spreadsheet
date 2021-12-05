@@ -1,7 +1,9 @@
 import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
-import {CellReference, ISpreadsheetModel, RangeExpression} from "../ISpreadsheetModel";
+import {ISpreadsheetModel} from "../ISpreadsheetModel";
 import { create, all } from 'mathjs'
 import {columnIndexToLetter, letterToColumnIndex} from "../../util/utils";
+import {CellReference} from "../CellReference";
+import {RangeExpression} from "../RangeExpression";
 
 export class SumVisitor implements SpreadsheetModelVisitor {
 

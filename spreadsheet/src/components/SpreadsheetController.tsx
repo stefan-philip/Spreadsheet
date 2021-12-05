@@ -1,9 +1,10 @@
 import React, {ReactElement, useEffect, useState} from 'react';
-import {CellReference, ISpreadsheetModel} from "../model/ISpreadsheetModel";
+import {ISpreadsheetModel} from "../model/ISpreadsheetModel";
 import Header from "./header";
 import FormulaBox from "./formulaBox";
 import Table from "./table";
 import {letterToColumnIndex} from "../util/utils";
+import {CellReference} from "../model/CellReference";
 
 
 interface ControllerProps {
