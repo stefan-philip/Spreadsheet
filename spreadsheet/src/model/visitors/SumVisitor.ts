@@ -18,7 +18,7 @@ export class SumVisitor extends AbstractVisitor {
       }
     }
 
-    if (expression.length == 0) {
+    if (expression.length === 0) {
       this.result = 0;
       return;
     }

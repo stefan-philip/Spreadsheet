@@ -2,7 +2,6 @@ import React, {ReactElement, useState} from 'react';
 import styled from "styled-components";
 import {Button, Modal} from "antd";
 import { RgbColorPicker } from "react-colorful";
-import {RGBColor} from "../model/CellStyle";
 
 const HeaderContainer = styled.div`
 

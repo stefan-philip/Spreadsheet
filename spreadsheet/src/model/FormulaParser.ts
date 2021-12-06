@@ -116,7 +116,7 @@ export class FormulaParser implements IFormulaParser {
     let formulaCopy = this.replaceAllReferences(formula);
     formulaCopy = this.replaceAllFunctions(formulaCopy);
 
-    if (formulaCopy.length == 0) {
+    if (formulaCopy.length === 0) {
       return "";
     }
 
