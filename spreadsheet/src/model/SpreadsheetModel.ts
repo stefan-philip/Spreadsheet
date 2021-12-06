@@ -11,8 +11,6 @@ import {CellStyle} from "./CellStyle";
 
 export class SpreadsheetModel implements ISpreadsheetModel{
   private cellMap : Map<string, Cell>;
-  private cellDependencies : Map<CellReference, CellReference[]>
-
   private numColumns;
   private numRows;
 
@@ -20,7 +18,6 @@ export class SpreadsheetModel implements ISpreadsheetModel{
 
   constructor() {
     this.cellMap = new Map<string, Cell>();
-    this.cellDependencies = new Map<CellReference, CellReference[]>();
     this.numColumns = 12;
     this.numRows = 25;
     this.parser = new FormulaParser(this);
@@ -33,7 +30,6 @@ export class SpreadsheetModel implements ISpreadsheetModel{
         let ref = new CellReference(i, columnIndexToLetter(j));
         let cell = new Cell();
         this.cellMap.set(ref.toString(), cell);
-        this.cellDependencies.set(ref, []);
       }
     }
   }
@@ -82,13 +78,11 @@ export class SpreadsheetModel implements ISpreadsheetModel{
       newMap.set(new CellReference(i, columnIndex).toString(), new Cell());
     }
 
-
-
     this.cellMap = newMap;
     this.numColumns++;
 
-    // TODO update dependencies?
-    //TODO update cell values?
+    this.updateDependencies();
+    this.updateCellValues();
   }
 
   addRowAbove(rowIndex: number): void {
@@ -114,8 +108,8 @@ export class SpreadsheetModel implements ISpreadsheetModel{
     this.cellMap = newMap;
     this.numRows++;
 
-    // TODO update dependencies?
-    //TODO update cell values?
+    this.updateDependencies();
+    this.updateCellValues();
   }
 
   removeColumn(columnIndex: string): void {
@@ -155,5 +149,17 @@ export class SpreadsheetModel implements ISpreadsheetModel{
   validateRangeExpression(range: RangeExpression) {
     this.validateCellReference(range.getStartRef());
     this.validateCellReference(range.getEndRef());
+  }
+
+  private updateCellValues() : void {
+    this.cellMap.forEach((cell : Cell, refString : string) => {
+      cell.update(this.parser);
+    })
+  }
+
+  private updateDependencies() : void {
+    this.cellMap.forEach((cell : Cell, refString : string) => {
+      cell.setFormula(cell.getFormula(), this.parser);
+    })
   }
 }

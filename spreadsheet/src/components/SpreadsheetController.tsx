@@ -3,7 +3,7 @@ import {ISpreadsheetModel} from "../model/ISpreadsheetModel";
 import Header from "./header";
 import FormulaBox from "./formulaBox";
 import Table from "./tableComponent";
-import {letterToColumnIndex} from "../util/utils";
+import {columnIndexToLetter, letterToColumnIndex} from "../util/utils";
 import {CellReference} from "../model/CellReference";
 import { Alert } from 'antd';
 
@@ -49,12 +49,19 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
 
   const handleClickClearCell = () : void => {
     handleFormulaChange("");
-
   }
 
   const handleClickCellBackground = () : void => { }
-  const handleClickAddRow = () : void => { }
-  const handleClickAddColumn = () : void => { }
+
+  const handleClickAddRow = () : void => {
+    model.addRowAbove(selected[1] as number);
+    setSelected([selected[0], selected[1] as number + 1]);
+  }
+
+  const handleClickAddColumn = () : void => {
+    model.addColumnToLeft(selected[0] as string);
+    setSelected([columnIndexToLetter(letterToColumnIndex(selected[0] as string) + 1), selected[1] as number]);
+  }
   const handleClickRemoveRow = () : void => { }
   const handleClickRemoveColumn = () : void => { }
 
