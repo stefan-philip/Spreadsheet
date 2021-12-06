@@ -9,15 +9,14 @@ import {Cell} from "./Cell";
 import {columnIndexToLetter, letterToColumnIndex} from "../util/utils";
 import {IFormulaParser} from "./IFormulaParser";
 
+// Parser for a SpreadsheetModel
 export class FormulaParser implements IFormulaParser {
 
   private model : SpreadsheetModel;
 
-  constructor(model : SpreadsheetModel) {
-    this.model = model;
-  }
+  constructor(model : SpreadsheetModel) {this.model = model;}
 
-
+  // Returns a list of Cells that are referenced in the given formula
   getReferencedCells(formula : string) : Cell[] {
     let cells : Cell[] = [];
 
@@ -92,6 +91,10 @@ export class FormulaParser implements IFormulaParser {
     return result;
   }
 
+  // Parses the given formula and returns an evaluated value
+  // Implements REF, AVG, PROD, and SUM functions
+  // String concatenation supported
+  // Math expressions supported
   parseFormula(formula : string) : string {
     if (formula === "") {
       return "";

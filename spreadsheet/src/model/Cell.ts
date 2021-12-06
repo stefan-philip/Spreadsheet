@@ -1,6 +1,8 @@
 import {CellStyle, RGBColor} from "./CellStyle";
 import {IFormulaParser} from "./IFormulaParser";
 
+// Cells are both observers and subjects
+// Updates to cell formula notifies all cells that depend on its value
 export class Cell implements IObserver, ISubject {
 
   // should contain cells that reference this cell

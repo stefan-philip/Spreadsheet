@@ -4,6 +4,7 @@ import {ISpreadsheetModel} from "../ISpreadsheetModel";
 import {columnIndexToLetter, letterToColumnIndex} from "../../util/utils";
 import {CellReference} from "../CellReference";
 
+// Abstract Visitor that contains a range and a method to obtain a numeric result
 export abstract class AbstractVisitor implements SpreadsheetModelVisitor {
 
   protected readonly range : RangeExpression;

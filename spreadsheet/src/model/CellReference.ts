@@ -1,13 +1,14 @@
 // Represents a position of a cell (numeric row and alphabetic column)
 export class CellReference {
-  private row: number;
-  private column: string;
+  private readonly row: number;
+  private readonly column: string;
 
   constructor(row: number, column: string) {
     this.row = row;
     this.column = column;
   }
 
+  // Factory method for cell references based on a string "A1" --> CellReference(1, "A")
   static createCellReference(refString: string): CellReference {
     let col = "";
     let row = "";
@@ -27,16 +28,8 @@ export class CellReference {
     return new CellReference(parseInt(row), col);
   }
 
-  toString(): string {
-    return this.getColumn() + this.getRow();
-  }
-
-  getRow(): number {
-    return this.row;
-  }
-
-  getColumn(): string {
-    return this.column;
-  }
-
+  // CellReference(1, "A") --> "A1"
+  toString(): string {return this.getColumn() + this.getRow();}
+  getRow(): number {return this.row;}
+  getColumn(): string {return this.column;}
 }

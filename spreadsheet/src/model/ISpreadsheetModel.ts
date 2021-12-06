@@ -2,6 +2,11 @@ import {SpreadsheetModelVisitor} from "./visitors/SpreadsheetModelVisitor";
 import {CellReference} from "./CellReference";
 import {CellStyle} from "./CellStyle";
 
+// A model that has functionality for representing a spreadsheet
+// where cells have formulas that compute to values, and cells
+// automatically update their dependencies when they are updated.
+
+// Model supports the Visitor pattern to extend functionality.
 export interface ISpreadsheetModel {
 
   // Methods to query size information for the spreadsheet

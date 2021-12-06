@@ -2,25 +2,15 @@
 export class CellStyle {
   private backgroundColor: Color;
 
-  constructor(backgroundColor: Color) {
-    this.backgroundColor = backgroundColor;
-  }
-
-  getBackgroundColor(): Color {
-    return this.backgroundColor;
-  }
-
-  setBackgroundColor(color: Color) {
-    this.backgroundColor = color;
-  }
+  constructor(backgroundColor: Color) {this.backgroundColor = backgroundColor;}
+  getBackgroundColor(): Color {return this.backgroundColor;}
+  setBackgroundColor(color: Color) {this.backgroundColor = color;}
 }
 
 // Represents a color that can be translated to RGB values
 export interface Color {
   getRed(): number;
-
   getGreen(): number;
-
   getBlue(): number;
 }
 
@@ -36,15 +26,7 @@ export class RGBColor {
     this.blue = blue;
   }
 
-  getRed(): number {
-    return this.red
-  }
-
-  getGreen(): number {
-    return this.green
-  }
-
-  getBlue(): number {
-    return this.blue;
-  }
+  getRed(): number {return this.red}
+  getGreen(): number {return this.green}
+  getBlue(): number {return this.blue;}
 }

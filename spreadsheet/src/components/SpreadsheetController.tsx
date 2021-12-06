@@ -15,6 +15,11 @@ interface ControllerProps {
   model : ISpreadsheetModel;
 }
 
+// Controller that handles communication between the model and UI components
+// All handlers defined here are passed down to UI components, and they communicate with the model
+// Error bar is shown when there are errors from the model
+// Cells are automatically refreshed when there is an update in the model
+
 const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
   const [selected, setSelected] = useState(["A", 1]);
   const [numTimesEnterHit, setNumTimesEnterHit] = useState(0);
