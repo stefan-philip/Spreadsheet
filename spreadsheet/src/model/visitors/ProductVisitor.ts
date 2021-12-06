@@ -1,22 +1,12 @@
-import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
 import {ISpreadsheetModel} from "../ISpreadsheetModel";
 import { create, all } from 'mathjs'
 import {columnIndexToLetter, letterToColumnIndex} from "../../util/utils";
 import {CellReference} from "../CellReference";
-import {RangeExpression} from "../RangeExpression";
+import {AbstractVisitor} from "./AbstractVisitor";
 
-export class ProductVisitor implements SpreadsheetModelVisitor {
-
-  private readonly range : RangeExpression;
-  private result : number;
-
-  constructor(range : RangeExpression) {
-    this.range = range;
-    this.result = 0;
-  }
+export class ProductVisitor extends AbstractVisitor {
 
   visitModel(model: ISpreadsheetModel): void {
-
     const config = { }
     const math = create(all, config)
     let vals : string[] = [];
@@ -53,9 +43,4 @@ export class ProductVisitor implements SpreadsheetModelVisitor {
     }
     this.result = r;
   }
-
-  getResult() {
-    return this.result;
-  }
-
 }

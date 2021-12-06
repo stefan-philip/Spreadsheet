@@ -1,19 +1,11 @@
-import {SpreadsheetModelVisitor} from "./SpreadsheetModelVisitor";
 import {ISpreadsheetModel} from "../ISpreadsheetModel";
 import {columnIndexToLetter, letterToColumnIndex} from "../../util/utils";
 import {SumVisitor} from "./SumVisitor";
 import {CellReference} from "../CellReference";
-import {RangeExpression} from "../RangeExpression";
+import {AbstractVisitor} from "./AbstractVisitor";
 
-export class AverageVisitor implements SpreadsheetModelVisitor {
+export class AverageVisitor extends AbstractVisitor {
 
-  private readonly range : RangeExpression;
-  private result : number;
-
-  constructor(range : RangeExpression) {
-    this.range = range;
-    this.result = 0;
-  }
 
   visitModel(model: ISpreadsheetModel): void {
 
@@ -46,9 +38,4 @@ export class AverageVisitor implements SpreadsheetModelVisitor {
 
     this.result = sum / nonEmptyTerms;
   }
-
-  getResult() {
-    return this.result;
-  }
-
 }
