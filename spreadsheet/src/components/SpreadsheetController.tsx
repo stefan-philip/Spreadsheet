@@ -17,11 +17,13 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
   const [selected, setSelected] = useState(["A", 1]);
   const [numTimesEnterHit, setNumTimesEnterHit] = useState(0);
 
-  useEffect(() => {
+  useEffect(() => { }, [model])
 
-  }, [model])
+  function getSelectedFormula(selectedPair : (string | number)[]) : string {
+    return model.getCellFormula(new CellReference(selectedPair[1] as number, selectedPair[0] as string));
+  }
 
-  function handleFormulaChange(newFormula : string) {
+  const handleFormulaChange = (newFormula : string) => {
     try {
       setNumTimesEnterHit(numTimesEnterHit + 1);
       model.updateCellFormula(new CellReference(selected[1] as number, selected[0] as string), newFormula);
@@ -32,19 +34,35 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
     }
   }
 
-  function getSelectedFormula(selectedPair : (string | number)[]) : string {
-    return model.getCellFormula(new CellReference(selectedPair[1] as number, selectedPair[0] as string));
-  }
-
   const handleCellClick = (rowNumber : number, columnLetter : string) : void => {
     if (rowNumber > 0 && letterToColumnIndex(columnLetter) > 0) {
       setSelected([columnLetter, rowNumber]);
     }
   }
 
+  const handleClickExport = () : void => { }
+
+  const handleClickClearCell = () : void => {
+    handleFormulaChange("");
+    
+  }
+
+  const handleClickCellBackground = () : void => { }
+  const handleClickAddRow = () : void => { }
+  const handleClickAddColumn = () : void => { }
+  const handleClickRemoveRow = () : void => { }
+  const handleClickRemoveColumn = () : void => { }
+
   return (
       <>
-        <Header/>
+        <Header handleClickExport={handleClickExport}
+                handleClickClearCell={handleClickClearCell}
+                handleClickCellBackground={handleClickCellBackground}
+                handleClickAddRow={handleClickAddRow}
+                handleClickAddColumn={handleClickAddColumn}
+                handleClickRemoveRow={handleClickRemoveRow}
+                handleClickRemoveColumn={handleClickRemoveColumn}/>
+
         <FormulaBox getSelectedFormula={getSelectedFormula}
                     selected={selected}
                     handleFormulaChange={handleFormulaChange}/>

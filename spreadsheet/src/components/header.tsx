@@ -29,19 +29,35 @@ const MenuButton = styled(Button)`
   }
 `
 
+interface HeaderProps {
+  handleClickExport: () => void;
+  handleClickClearCell: () => void;
+  handleClickCellBackground: () => void;
+  handleClickAddRow: () => void;
+  handleClickAddColumn: () => void;
+  handleClickRemoveRow: () => void;
+  handleClickRemoveColumn: () => void;
 
-const Header = () : ReactElement => {
+}
+
+const Header = ({handleClickExport,
+                  handleClickClearCell,
+                  handleClickCellBackground,
+                  handleClickAddRow,
+                  handleClickAddColumn,
+                  handleClickRemoveRow,
+                  handleClickRemoveColumn} : HeaderProps) : ReactElement => {
   return (
       <HeaderContainer>
         <h3>Spreadsheet</h3>
         <ButtonContainer>
-          <MenuButton>Export</MenuButton>
-          <MenuButton>Clear Cell</MenuButton>
-          <MenuButton>Cell Background</MenuButton>
-          <MenuButton>Add Row</MenuButton>
-          <MenuButton>Add Column</MenuButton>
-          <MenuButton>Remove Row</MenuButton>
-          <MenuButton>Remove Column</MenuButton>
+          <MenuButton onClick={handleClickExport}>Export</MenuButton>
+          <MenuButton onClick={handleClickClearCell}>Clear Cell</MenuButton>
+          <MenuButton onClick={handleClickCellBackground}>Cell Background</MenuButton>
+          <MenuButton onClick={handleClickAddRow}>Add Row</MenuButton>
+          <MenuButton onClick={handleClickAddColumn}>Add Column</MenuButton>
+          <MenuButton onClick={handleClickRemoveRow}>Remove Row</MenuButton>
+          <MenuButton onClick={handleClickRemoveColumn}>Remove Column</MenuButton>
         </ButtonContainer>
       </HeaderContainer>
   );
