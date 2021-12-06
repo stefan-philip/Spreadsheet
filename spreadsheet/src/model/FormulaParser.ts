@@ -7,8 +7,9 @@ import {CellReference} from "./CellReference";
 import {RangeExpression} from "./RangeExpression";
 import {Cell} from "./Cell";
 import {columnIndexToLetter, letterToColumnIndex} from "../util/utils";
+import {IFormulaParser} from "./IFormulaParser";
 
-export class FormulaParser {
+export class FormulaParser implements IFormulaParser {
 
   private model : SpreadsheetModel;
 

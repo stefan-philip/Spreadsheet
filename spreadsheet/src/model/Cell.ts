@@ -1,5 +1,5 @@
 import {CellStyle, RGBColor} from "./CellStyle";
-import {FormulaParser} from "./FormulaParser";
+import {IFormulaParser} from "./IFormulaParser";
 
 export class Cell implements IObserver, ISubject {
 
@@ -17,7 +17,7 @@ export class Cell implements IObserver, ISubject {
     this.style = new CellStyle(new RGBColor(255, 255, 255));
   }
 
-  setFormula(formula : string, parser : FormulaParser) : void {
+  setFormula(formula : string, parser : IFormulaParser) : void {
 
     // these two should throw error before we do any changes
     parser.parseFormula(formula);
@@ -41,22 +41,19 @@ export class Cell implements IObserver, ISubject {
     this.update(parser);
   }
 
-
   attach(observer : Cell) {this.dependents.add(observer);}
   detach(observer: Cell) {this.dependents.delete(observer);}
 
-
-  update(parser : FormulaParser) {
+  update(parser : IFormulaParser) {
     this.value = parser.parseFormula(this.formula);
     this.notifyObservers(parser);
   }
 
-  notifyObservers(parser : FormulaParser) {
+  notifyObservers(parser : IFormulaParser) {
     this.dependents.forEach(d => {
       d.update(parser);
     })
   }
-
 
   getFormula() : string { return this.formula };
   getValue() : string { return this.value };
@@ -67,11 +64,11 @@ export class Cell implements IObserver, ISubject {
 }
 
 interface IObserver {
-  update(parser : FormulaParser) : void;
+  update(parser : IFormulaParser) : void;
 }
 
 interface ISubject {
   attach(observer : IObserver) : void;
   detach(observer : IObserver) : void;
-  notifyObservers(parser : FormulaParser) : void;
+  notifyObservers(parser : IFormulaParser) : void;
 }
