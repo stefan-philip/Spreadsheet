@@ -1,7 +1,5 @@
 import {ISpreadsheetModel} from "../ISpreadsheetModel";
 import { create, all } from 'mathjs'
-import {columnIndexToLetter, letterToColumnIndex} from "../../util/utils";
-import {CellReference} from "../CellReference";
 import {AbstractVisitor} from "./AbstractVisitor";
 
 export class SumVisitor extends AbstractVisitor {
@@ -9,25 +7,8 @@ export class SumVisitor extends AbstractVisitor {
   visitModel(model: ISpreadsheetModel): void {
     const config = { }
     const math = create(all, config)
-    let vals : string[] = [];
-
-    let startColumnIndex = letterToColumnIndex(this.range.getStartRef().getColumn());
-    let endColumnIndex = letterToColumnIndex(this.range.getEndRef().getColumn());
-
-    let startRowIndex = this.range.getStartRef().getRow();
-    let endRowIndex = this.range.getEndRef().getRow();
-
-    for (let col = startColumnIndex; col <= endColumnIndex; col++) {
-      for (let row = startRowIndex; row <= endRowIndex; row++) {
-        let ref = new CellReference(row, columnIndexToLetter(col));
-        let v = model.getCellValue(ref);
-        if (v.length > 0) {
-          vals.push(v);
-        }
-      }
-    }
-
     let expression = "";
+    let vals = this.getNonEmptyCellValues(model);
 
     for (let i = 0; i < vals.length; i++) {
       expression = expression.concat(vals[i]);
