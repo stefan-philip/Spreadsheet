@@ -49,5 +49,3 @@ it('cell dependencies are notified of updates', () => {
   expect(cell2.getFormula()).toEqual("2");
   expect(cell1.numberOfTimesUpdated).not.toEqual(0);
 });
-
-export {};

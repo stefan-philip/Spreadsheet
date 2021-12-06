@@ -100,6 +100,16 @@ export class FormulaParser implements IFormulaParser {
     const config = { }
     const math = create(all, config)
 
+    let originalDivide = math.divide;
+    math.import({
+      divide: function (a : any, b : any) {
+        if (math.isZero(b)) {
+          throw new Error('Divide by zero');
+        }
+        return originalDivide(a, b);
+      }
+    }, {override: true})
+
     let formulaCopy = this.replaceAllReferences(formula);
     formulaCopy = this.replaceAllFunctions(formulaCopy);
 
@@ -112,7 +122,7 @@ export class FormulaParser implements IFormulaParser {
 
     if (/^[ ()\[\]0-9+\-*.\/]*$/.test(formulaCopy)) {
       let res = math.evaluate(formulaCopy);
-      return res !== undefined ? res : "wrong";
+      return res !== undefined ? res + "" : "wrong";
     }
 
     return formulaCopy;
