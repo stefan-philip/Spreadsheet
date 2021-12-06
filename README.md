@@ -16,6 +16,8 @@ Navigate to `localhost:3000` in the browser, where the application is now runnin
 
 To run unit tests:
 
+`cd spreadsheet`
+
 `yarn`
 
 `yarn run test` 
