@@ -7,6 +7,9 @@ import {columnIndexToLetter, letterToColumnIndex} from "../util/utils";
 import {CellReference} from "../model/CellReference";
 import { Alert } from 'antd';
 import {CellStyle, RGBColor} from "../model/CellStyle";
+import writeXlsxFile from 'write-excel-file'
+import {ExcelDataVisitor} from "../model/visitors/ExcelDataVisitor";
+
 
 interface ControllerProps {
   model : ISpreadsheetModel;
@@ -43,7 +46,14 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
     }
   }
 
-  const handleClickExport = () : void => { }
+  const handleClickExport = async (): Promise<void> => {
+    let visitor = new ExcelDataVisitor();
+    model.accept(visitor);
+    let data = visitor.getResult();
+    await writeXlsxFile(data, {
+      fileName: 'spreadsheet.xlsx'
+    })
+  }
 
   const handleClickClearCell = () : void => {
     handleFormulaChange("");
