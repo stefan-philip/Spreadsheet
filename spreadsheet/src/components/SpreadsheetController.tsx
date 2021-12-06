@@ -57,6 +57,7 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
 
   const handleClickClearCell = () : void => {
     handleFormulaChange("");
+    handleClickCellBackground({r:255,g:255,b:255});
   }
 
   const handleClickCellBackground = (color : {r:number,g:number,b:number}) : void => {
