@@ -7,6 +7,8 @@ Run the commands:
 
 `cd spreadsheet`
 
+`yarn`
+
 `yarn run start`
 
 Navigate to `localhost:3000` in the browser, where the application is now running
@@ -42,5 +44,5 @@ Cells (and their dependencies) should be updated once the Enter button on the UI
 * Columns can be added above a selected column with the Add Column button
 * Rows can be removed using the Remove Row button
 * Columns can be removed using the Remove Column button
-* Cell background color can be changed
-* Spreadsheet values can be exported to Excel file (.xlsx)
+* Cell background color can be changed using the Cell Background button
+* Spreadsheet values can be exported to Excel file (.xlsx) using the Export button
