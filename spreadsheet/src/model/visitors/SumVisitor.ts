@@ -17,6 +17,11 @@ export class SumVisitor extends AbstractVisitor {
       }
     }
 
+    if (expression.length == 0) {
+      this.result = 0;
+      return;
+    }
+
     let r = math.evaluate(expression);
     if (r === undefined) {
       throw new Error("Invalid values in range");
