@@ -14,6 +14,12 @@ Run the commands:
 Navigate to `localhost:3000` in the browser, where the application is now running
 
 
+To run unit tests:
+
+`yarn`
+
+`yarn run test` 
+
 ## Using the Spreadsheet
 Cell formulas can be changed by selecting the desired cell, writing a formula in the formula text box in the header, and clicking the Enter button on the UI.
 
