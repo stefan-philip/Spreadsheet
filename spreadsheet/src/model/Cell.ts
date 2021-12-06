@@ -18,8 +18,9 @@ export class Cell implements IObserver, ISubject {
   }
 
   setFormula(formula : string, parser : FormulaParser) : void {
+
     // these two should throw error before we do any changes
-    parser.parseFormula(this.formula);
+    parser.parseFormula(formula);
     let cellsReferencedTo = parser.getReferencedCells(formula);
 
     if (cellsReferencedTo.includes(this)) {
