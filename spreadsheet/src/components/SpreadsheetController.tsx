@@ -5,6 +5,7 @@ import FormulaBox from "./formulaBox";
 import Table from "./tableComponent";
 import {letterToColumnIndex} from "../util/utils";
 import {CellReference} from "../model/CellReference";
+import { Alert } from 'antd';
 
 
 interface ControllerProps {
@@ -16,6 +17,9 @@ interface ControllerProps {
 const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
   const [selected, setSelected] = useState(["A", 1]);
   const [numTimesEnterHit, setNumTimesEnterHit] = useState(0);
+
+  const [error, setError] = useState("");
+  const [shouldShowError, setShouldShowError] = useState(false);
 
   useEffect(() => { }, [model])
 
@@ -30,7 +34,8 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
     }
     catch (e) {
       // @ts-ignore
-      console.log("ERROR: " + e.message);
+      setError(e.message);
+      setShouldShowError(true);
     }
   }
 
@@ -44,7 +49,7 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
 
   const handleClickClearCell = () : void => {
     handleFormulaChange("");
-    
+
   }
 
   const handleClickCellBackground = () : void => { }
@@ -66,6 +71,14 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
         <FormulaBox getSelectedFormula={getSelectedFormula}
                     selected={selected}
                     handleFormulaChange={handleFormulaChange}/>
+
+        {shouldShowError && <Alert message={error}
+                                  closable={true}
+                                  showIcon={true}
+                                  onClose={()=>{setShouldShowError(false)}}
+                                   banner={true}/>}
+
+
         <Table model={model}
                selected={selected}
                handleCellClick={handleCellClick}

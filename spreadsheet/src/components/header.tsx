@@ -5,7 +5,7 @@ import {Button} from "antd";
 const HeaderContainer = styled.div`
 
   width: 100%;
-  background-color: #f5f5f5;
+  background-color: #e8ffec;
   display: flex;
   flex-direction: column;
   padding-left: 20px;
@@ -29,6 +29,11 @@ const MenuButton = styled(Button)`
   }
 `
 
+const Title = styled.h2`
+  margin-top: 10px;
+  margin-left: 12px;
+`
+
 interface HeaderProps {
   handleClickExport: () => void;
   handleClickClearCell: () => void;
@@ -49,7 +54,7 @@ const Header = ({handleClickExport,
                   handleClickRemoveColumn} : HeaderProps) : ReactElement => {
   return (
       <HeaderContainer>
-        <h3>Spreadsheet</h3>
+        <Title>Spreadsheet</Title>
         <ButtonContainer>
           <MenuButton onClick={handleClickExport}>Export</MenuButton>
           <MenuButton onClick={handleClickClearCell}>Clear Cell</MenuButton>
