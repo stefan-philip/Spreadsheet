@@ -1,6 +1,8 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, useState} from 'react';
 import styled from "styled-components";
-import {Button} from "antd";
+import {Button, Modal} from "antd";
+import { RgbColorPicker } from "react-colorful";
+import {RGBColor} from "../model/CellStyle";
 
 const HeaderContainer = styled.div`
 
@@ -37,7 +39,7 @@ const Title = styled.h2`
 interface HeaderProps {
   handleClickExport: () => void;
   handleClickClearCell: () => void;
-  handleClickCellBackground: () => void;
+  handleClickCellBackground: (color : {r:number,g:number,b:number}) => void;
   handleClickAddRow: () => void;
   handleClickAddColumn: () => void;
   handleClickRemoveRow: () => void;
@@ -52,13 +54,25 @@ const Header = ({handleClickExport,
                   handleClickAddColumn,
                   handleClickRemoveRow,
                   handleClickRemoveColumn} : HeaderProps) : ReactElement => {
+
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [color, setColor] = useState({r: 255, g:255, b:255});
+
+  const handleOk = () => {
+    setShowColorPicker(false);
+    handleClickCellBackground(color);
+  }
+
   return (
       <HeaderContainer>
+        <Modal title="Basic Modal" visible={showColorPicker} onOk={handleOk} onCancel={() => setShowColorPicker(false)}>
+          <RgbColorPicker onChange={setColor}/>
+        </Modal>
         <Title>Spreadsheet</Title>
         <ButtonContainer>
           <MenuButton onClick={handleClickExport}>Export</MenuButton>
           <MenuButton onClick={handleClickClearCell}>Clear Cell</MenuButton>
-          <MenuButton onClick={handleClickCellBackground}>Cell Background</MenuButton>
+          <MenuButton onClick={() => setShowColorPicker(true)}>Cell Background</MenuButton>
           <MenuButton onClick={handleClickAddRow}>Add Row</MenuButton>
           <MenuButton onClick={handleClickAddColumn}>Add Column</MenuButton>
           <MenuButton onClick={handleClickRemoveRow}>Remove Row</MenuButton>

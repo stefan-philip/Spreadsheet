@@ -1,5 +1,6 @@
 import React, {ReactElement} from 'react';
 import styled from "styled-components";
+import {Color} from "../model/CellStyle";
 
 const CellContainer = styled.div`
   width: 60px;
@@ -9,8 +10,7 @@ const CellContainer = styled.div`
   border-style: solid;
   border-color: rgba(0, 0, 0, .05);
   text-align: center;
-  background-color: white;
-  overflow: hidden;
+  background-color: ${({ colorRGB } : CellProps2) => "rgb(" + colorRGB.r + "," + colorRGB.g + ", " + colorRGB.b + ")"};  overflow: hidden;
 `
 
 
@@ -22,7 +22,7 @@ const SelectedCellContainer = styled.div`
   border-style: solid;
   border-color: #3373de;
   text-align: center;
-  background-color: white;
+  background-color: ${({ colorRGB } : CellProps2) => "rgb(" + colorRGB.r + "," + colorRGB.g + ", " + colorRGB.b + ")"};
   overflow: hidden;
 `
 
@@ -37,17 +37,28 @@ interface CellProps {
   rowIndex: number;
   columnLetter : string;
   handleCellClick : (rowIndex : number, columnLetter : string) => void;
+  color : Color;
 }
 
-const Cell = ({text, className, selected, rowIndex, columnLetter, handleCellClick} : CellProps) : ReactElement => {
+interface CellProps2 {
+  colorRGB : { r:number, g:number, b:number }
+}
+
+const Cell = ({text, className, selected, rowIndex, columnLetter, handleCellClick, color} : CellProps) : ReactElement => {
   const isSelected = selected[1] === rowIndex && selected[0] === columnLetter;
   return (
         isSelected ?
-          <SelectedCellContainer onClick={() => handleCellClick(rowIndex || 0, columnLetter)} className={className}>
+          <SelectedCellContainer
+              colorRGB={{r: color.getRed(), g: color.getGreen(), b: color.getBlue()}}
+              onClick={() => handleCellClick(rowIndex || 0, columnLetter)}
+              className={className}>
             <CellText>{text}</CellText>
           </SelectedCellContainer>
             :
-            <CellContainer onClick={() => handleCellClick(rowIndex || 0, columnLetter)} className={className}>
+            <CellContainer
+                colorRGB={{r: color.getRed(), g: color.getGreen(), b: color.getBlue()}}
+                onClick={() => handleCellClick(rowIndex || 0, columnLetter)}
+                className={className}>
               <CellText>{text}</CellText>
             </CellContainer>
 

@@ -4,6 +4,7 @@ import {ISpreadsheetModel} from "../model/ISpreadsheetModel";
 import Cell from "./cell";
 import {columnIndexToLetter} from "../util/utils";
 import {CellReference} from "../model/CellReference";
+import {CellStyle, RGBColor} from "../model/CellStyle";
 
 
 const TableContainer = styled.div`
@@ -32,17 +33,19 @@ interface RowProps {
   className?: string;
   selected: (string | number)[];
   handleCellClick: (rowNumber : number, columnLetter : string) => void;
+  getCellStyle : (rowNumber : number, columnLetter : string) => CellStyle;
 }
 
 
 
-const Row = ({rowNumber, numberOfColumns, rowData, className, selected, handleCellClick} : RowProps) : ReactElement => {
+const Row = ({rowNumber, numberOfColumns, rowData, className, selected, handleCellClick, getCellStyle} : RowProps) : ReactElement => {
   return (
       <RowContainer className={className}>
-        <RowNumber handleCellClick={handleCellClick} text={rowNumber ? rowNumber+"" : ""} selected={selected} rowIndex={rowNumber || 0} columnLetter={""}/>
+        <RowNumber color={new RGBColor(255, 255, 255)} handleCellClick={handleCellClick} text={rowNumber ? rowNumber+"" : ""} selected={selected} rowIndex={rowNumber || 0} columnLetter={""}/>
 
         {rowData.map((data, index) => {
-          return <Cell handleCellClick={handleCellClick} text={data + ""} selected={selected} rowIndex={rowNumber || 0} columnLetter={columnIndexToLetter(index+1)}/>
+          let cellStyle : CellStyle = getCellStyle(rowNumber ? rowNumber : 1, columnIndexToLetter(index+1));
+          return <Cell color={cellStyle.getBackgroundColor()} handleCellClick={handleCellClick} text={data + ""} selected={selected} rowIndex={rowNumber || 0} columnLetter={columnIndexToLetter(index+1)}/>
         })}
       </RowContainer>
 
@@ -62,9 +65,10 @@ interface TableProps {
   selected : (string | number)[];
   handleCellClick: (rowNumber : number, columnLetter : string) => void;
   numTimesEnterHit : number;
+  getCellStyle : (rowNumber : number, columnLetter : string) => CellStyle;
 }
 
-const Table = ({model, selected, handleCellClick, numTimesEnterHit} : TableProps) : ReactElement => {
+const Table = ({model, selected, handleCellClick, numTimesEnterHit, getCellStyle} : TableProps) : ReactElement => {
 
   let nums = Array.from({length: model.getNumberOfRows()}, (_, i) => i + 1);
   let cols = Array.from({length: model.getNumberOfColumns()}, (_, i) => i + 1);
@@ -86,7 +90,8 @@ const Table = ({model, selected, handleCellClick, numTimesEnterHit} : TableProps
                    numberOfColumns={model.getNumberOfColumns()}
                    rowData={data}
                    selected={selected}
-                   handleCellClick={handleCellClick}/>);
+                   handleCellClick={handleCellClick}
+                   getCellStyle={getCellStyle}/>);
     });
   }
 
@@ -95,7 +100,8 @@ const Table = ({model, selected, handleCellClick, numTimesEnterHit} : TableProps
         <ColumnHeader numberOfColumns = {model.getNumberOfColumns()}
                       rowData={columnNames}
                       selected={selected}
-                      handleCellClick={handleCellClick}/>
+                      handleCellClick={handleCellClick}
+                      getCellStyle={getCellStyle}/>
         {buildRows(selected)}
       </TableContainer>
   );

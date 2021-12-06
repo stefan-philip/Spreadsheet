@@ -6,6 +6,7 @@ import Table from "./tableComponent";
 import {columnIndexToLetter, letterToColumnIndex} from "../util/utils";
 import {CellReference} from "../model/CellReference";
 import { Alert } from 'antd';
+import {CellStyle, RGBColor} from "../model/CellStyle";
 
 interface ControllerProps {
   model : ISpreadsheetModel;
@@ -48,7 +49,11 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
     handleFormulaChange("");
   }
 
-  const handleClickCellBackground = () : void => { }
+  const handleClickCellBackground = (color : {r:number,g:number,b:number}) : void => {
+    model.updateCellStyle(CellReference.createCellReference(selected[0] + "" + selected[1]),
+                          new CellStyle(new RGBColor(color.r, color.g, color.b)));
+    setNumTimesEnterHit(numTimesEnterHit + 1);
+  }
 
   const handleClickAddRow = () : void => {
     model.addRowAbove(selected[1] as number);
@@ -82,6 +87,10 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
     }
   }
 
+  const getCellStyle = (rowIndex : number, columnLetter : string) => {
+    return model.getCellStyle(new CellReference(rowIndex, columnLetter));
+  }
+
   return (
       <>
         <Header handleClickExport={handleClickExport}
@@ -106,7 +115,8 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
         <Table model={model}
                selected={selected}
                handleCellClick={handleCellClick}
-               numTimesEnterHit={numTimesEnterHit}/>
+               numTimesEnterHit={numTimesEnterHit}
+               getCellStyle={getCellStyle}/>
       </>
   );
 }
