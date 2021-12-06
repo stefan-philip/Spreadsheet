@@ -112,12 +112,53 @@ export class SpreadsheetModel implements ISpreadsheetModel{
     this.updateCellValues();
   }
 
-  removeColumn(columnIndex: string): void {
+  removeColumn(columnLetter: string): void {
+    if (this.numColumns == 1) {
+      return;
+    }
 
+    let columnIndex = letterToColumnIndex(columnLetter);
+
+    if (columnIndex < 1 || columnIndex > this.numColumns) {
+      throw new Error("Invalid column index");
+    }
+
+    for (let col = columnIndex; col <= this.numColumns; col++) {
+      for (let i = 1; i <= this.numRows; i++) {
+        // set everything in the same column to whatevers in the next column
+        let refString = columnIndexToLetter(col) + i;
+        let nextRefString = columnIndexToLetter(col + 1) + "" + (i);
+        this.cellMap.set(refString, this.cellMap.get(nextRefString) || new Cell());
+      }
+    }
+
+    this.numColumns--;
+
+    this.updateDependencies();
+    this.updateCellValues();
   }
 
   removeRow(rowIndex: number): void {
+    if (this.numRows == 1) {
+      return;
+    }
 
+    if (rowIndex < 1 || rowIndex > this.numRows) {
+      throw new Error("Invalid row index");
+    }
+
+    for (let row = rowIndex; row <= this.numRows; row++) {
+      for (let i = 1; i <= this.numColumns; i++) {
+        let refString = columnIndexToLetter(i) + row;
+        let nextRefString = columnIndexToLetter(i) + "" + (row + 1);
+        this.cellMap.set(refString, this.cellMap.get(nextRefString) || new Cell());
+      }
+    }
+
+    this.numRows--;
+
+    this.updateDependencies();
+    this.updateCellValues();
   }
 
   clearCell(reference: CellReference): void {

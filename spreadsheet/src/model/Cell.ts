@@ -22,6 +22,10 @@ export class Cell implements IObserver, ISubject {
     parser.parseFormula(this.formula);
     let cellsReferencedTo = parser.getReferencedCells(formula);
 
+    if (cellsReferencedTo.includes(this)) {
+      this.setFormula("", parser);
+      throw new Error("Cell formula cannot reference itself. Clearing the formula...");
+    }
 
     this.dependents.forEach((cell) => {
       cell.detach(this);

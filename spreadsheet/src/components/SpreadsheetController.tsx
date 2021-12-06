@@ -7,12 +7,9 @@ import {columnIndexToLetter, letterToColumnIndex} from "../util/utils";
 import {CellReference} from "../model/CellReference";
 import { Alert } from 'antd';
 
-
 interface ControllerProps {
   model : ISpreadsheetModel;
 }
-
-
 
 const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
   const [selected, setSelected] = useState(["A", 1]);
@@ -57,13 +54,33 @@ const SpreadsheetController = ({model} : ControllerProps) : ReactElement => {
     model.addRowAbove(selected[1] as number);
     setSelected([selected[0], selected[1] as number + 1]);
   }
-
   const handleClickAddColumn = () : void => {
     model.addColumnToLeft(selected[0] as string);
     setSelected([columnIndexToLetter(letterToColumnIndex(selected[0] as string) + 1), selected[1] as number]);
   }
-  const handleClickRemoveRow = () : void => { }
-  const handleClickRemoveColumn = () : void => { }
+  const handleClickRemoveRow = () : void => {
+    try {
+      model.removeRow(selected[1] as number);
+      setSelected([selected[0], Math.max(1, selected[1] as number - 1)]);
+    }
+    catch (e) {
+      // @ts-ignore
+      setError(e.message);
+      setShouldShowError(true);
+    }
+
+  }
+  const handleClickRemoveColumn = () : void => {
+    try {
+      model.removeColumn(selected[0] as string);
+      setSelected([columnIndexToLetter(Math.max(1, letterToColumnIndex(selected[0] as string) - 1)), selected[1] as number]);
+    }
+    catch (e) {
+      // @ts-ignore
+      setError(e.message);
+      setShouldShowError(true);
+    }
+  }
 
   return (
       <>
