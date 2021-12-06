@@ -5,38 +5,114 @@ import {AverageVisitor} from "./visitors/AverageVisitor";
 import {all, create} from "mathjs";
 import {CellReference} from "./CellReference";
 import {RangeExpression} from "./RangeExpression";
+import {Cell} from "./Cell";
+import {columnIndexToLetter, letterToColumnIndex} from "../util/utils";
 
 export class FormulaParser {
 
-  private static supportedFunctions = ["SUM", "AVG", "PROD", "REF"];
+  private model : SpreadsheetModel;
 
-  parseFormula(formula : string, model : SpreadsheetModel, reference : CellReference) : string {
+  constructor(model : SpreadsheetModel) {
+    this.model = model;
+  }
+
+
+  getReferencedCells(formula : string) : Cell[] {
+    let cells : Cell[] = [];
+
+    let result = formula + "";
+    while (result.includes("REF(")) {
+      let i = result.indexOf("REF(");
+      let end = result.indexOf(")", i + 4);
+
+      let middle = result.substring(i + 4, end);
+
+      let ref = CellReference.createCellReference(middle);
+      this.model.validateCellReference(ref);
+      cells.push(this.model.getCell(ref));
+      result = result.replace("REF(" + middle + ")", "");
+    }
+
+    while (result.includes("SUM(")) {
+      let i = result.indexOf("SUM(");
+      let end = result.indexOf(")", i + 4);
+
+      let middle = result.substring(i + 4, end);
+
+      let range = RangeExpression.createRangeExpression(middle);
+      this.model.validateRangeExpression(range);
+      cells = cells.concat(this.getCellsFromRange(range));
+      result = result.replace("SUM(" + middle + ")", "");
+    }
+
+    while (result.includes("AVG(")) {
+      let i = result.indexOf("AVG(");
+      let end = result.indexOf(")", i + 4);
+
+      let middle = result.substring(i + 4, end);
+
+      let range = RangeExpression.createRangeExpression(middle);
+      this.model.validateRangeExpression(range);
+      cells = cells.concat(this.getCellsFromRange(range));
+      result = result.replace("AVG(" + middle + ")", "");
+    }
+
+    while (result.includes("PROD(")) {
+      let i = result.indexOf("PROD(");
+      let end = result.indexOf(")", i + 5);
+
+      let middle = result.substring(i + 5, end);
+
+      let range = RangeExpression.createRangeExpression(middle);
+      this.model.validateRangeExpression(range);
+      cells = cells.concat(this.getCellsFromRange(range));
+      result = result.replace("PROD(" + middle + ")", "");
+    }
+
+    return cells;
+  }
+
+  private getCellsFromRange(range : RangeExpression) : Cell[] {
+    let result : Cell[] = [];
+
+    let startColumnIndex = letterToColumnIndex(range.getStartRef().getColumn());
+    let endColumnIndex = letterToColumnIndex(range.getEndRef().getColumn());
+
+    let startRowIndex = range.getStartRef().getRow();
+    let endRowIndex = range.getEndRef().getRow();
+
+    for (let col = startColumnIndex; col <= endColumnIndex; col++) {
+      for (let row = startRowIndex; row <= endRowIndex; row++) {
+        let ref = new CellReference(row, columnIndexToLetter(col));
+        let cell = this.model.getCell(ref);
+        result.push(cell);
+      }
+    }
+    return result;
+  }
+
+  parseFormula(formula : string) : string {
     if (formula === "") {
       return "";
     }
 
-    // SUM AVG PROD should always contain range expression
-    // REF should always have cell reference
-    //    replace REF with cell value
-
-    // 1 + REF(A1) + 7 * SUM(A2..B5)
     const config = { }
     const math = create(all, config)
 
-    let formulaCopy = this.replaceAllReferences(formula, model);
-    formulaCopy = this.replaceAllFunctions(formulaCopy, model);
+    let formulaCopy = this.replaceAllReferences(formula);
+    formulaCopy = this.replaceAllFunctions(formulaCopy);
     let res = math.evaluate(formulaCopy);
     return res !== undefined ? res : "wrong";
   }
 
-  private replaceAllFunctions(formula : string, model : SpreadsheetModel) : string {
-    let result = this.replaceAllSum(formula, model);
-    result = this.replaceAllAverage(result, model);
-    result = this.replaceAllProduct(result, model);
+  private replaceAllFunctions(formula : string) : string {
+    let result = this.replaceAllSum(formula);
+    result = this.replaceAllAverage(result);
+    result = this.replaceAllProduct(result);
     return result;
   }
 
-  private replaceAllSum(formula : string, model : SpreadsheetModel) : string {
+  private replaceAllSum(formula : string) : string {
     let result = formula + "";
 
     while (result.includes("SUM(")) {
@@ -46,16 +122,16 @@ export class FormulaParser {
       let middle = result.substring(i + 4, end);
 
       let range = RangeExpression.createRangeExpression(middle);
-      model.validateRangeExpression(range);
+      this.model.validateRangeExpression(range);
       let sumVisitor = new SumVisitor(range);
-      model.accept(sumVisitor);
+      this.model.accept(sumVisitor);
       result = result.replace("SUM(" + middle + ")", sumVisitor.getResult() + "");
     }
 
     return result;
   }
 
-  private replaceAllAverage(formula : string, model : SpreadsheetModel) : string {
+  private replaceAllAverage(formula : string) : string {
     let result = formula + "";
 
     while (result.includes("AVG(")) {
@@ -65,16 +141,16 @@ export class FormulaParser {
       let middle = result.substring(i + 4, end);
 
       let range = RangeExpression.createRangeExpression(middle);
-      model.validateRangeExpression(range);
+      this.model.validateRangeExpression(range);
       let avgVisitor = new AverageVisitor(range);
-      model.accept(avgVisitor);
+      this.model.accept(avgVisitor);
       result = result.replace("AVG(" + middle + ")", avgVisitor.getResult() + "");
     }
 
     return result;
   }
 
-  private replaceAllProduct(formula : string, model : SpreadsheetModel) : string {
+  private replaceAllProduct(formula : string) : string {
     let result = formula + "";
 
     while (result.includes("PROD(")) {
@@ -84,16 +160,16 @@ export class FormulaParser {
       let middle = result.substring(i + 5, end);
 
       let range = RangeExpression.createRangeExpression(middle);
-      model.validateRangeExpression(range);
+      this.model.validateRangeExpression(range);
       let productVisitor = new ProductVisitor(range);
-      model.accept(productVisitor);
+      this.model.accept(productVisitor);
       result = result.replace("PROD(" + middle + ")", productVisitor.getResult() + "");
     }
 
     return result;
   }
 
-  private replaceAllReferences(formula : string, model : SpreadsheetModel) : string {
+  private replaceAllReferences(formula : string) : string {
     let result = formula + "";
 
     while (result.includes("REF(")) {
@@ -104,13 +180,11 @@ export class FormulaParser {
 
       let ref = CellReference.createCellReference(middle);
 
-      model.validateCellReference(ref);
-      result = result.replace("REF(" + middle + ")", model.getCellValue(ref));
+      this.model.validateCellReference(ref);
+      result = result.replace("REF(" + middle + ")", this.model.getCellValue(ref));
     }
 
     return result;
   }
-
-
 
 }

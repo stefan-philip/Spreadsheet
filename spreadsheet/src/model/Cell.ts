@@ -1,46 +1,53 @@
 import {CellStyle, RGBColor} from "./CellStyle";
+import {FormulaParser} from "./FormulaParser";
 
 export class Cell implements IObserver, ISubject {
 
-  private dependents : Set<IObserver>;
+  // should contain cells that reference this cell
+  private dependents : Set<Cell>;
 
   private value : string;
   private formula : string;
   private style : CellStyle;
 
-
   constructor() {
-    this.dependents = new Set<IObserver>();
+    this.dependents = new Set<Cell>();
     this.value = "";
     this.formula = "";
     this.style = new CellStyle(new RGBColor(255, 255, 255));
   }
 
-  setFormula(formula : string) : void {
-    // do formula valuation
+  setFormula(formula : string, parser : FormulaParser) : void {
+
+    this.dependents.forEach((cell) => {
+      cell.detach(this);
+    })
+
     this.formula = formula;
-    this.notifyObservers();// TODO:update dependencies
+    let cellsReferencedTo = parser.getReferencedCells(formula);
+
+    cellsReferencedTo.forEach((cell) => {
+      cell.attach(this);
+    })
+
+    this.update(parser);
   }
 
-  setValue(value : string) : void {
-    // do formula valuation
-    this.value = value;
-    this.notifyObservers();
+
+  attach(observer : Cell) {this.dependents.add(observer);}
+  detach(observer: Cell) {this.dependents.delete(observer);}
+
+
+  update(parser : FormulaParser) {
+    this.value = parser.parseFormula(this.formula);
+    this.notifyObservers(parser);
   }
 
-  attach(observer : IObserver) {this.dependents.add(observer);}
-  detach(observer: IObserver) {this.dependents.delete(observer);}
-
-  notifyObservers() {
+  notifyObservers(parser : FormulaParser) {
     this.dependents.forEach(d => {
-      d.update();
+      d.update(parser);
     })
   }
-
-  update() {
-    //TODO
-  }
-
 
 
   getFormula() : string { return this.formula };
@@ -52,11 +59,11 @@ export class Cell implements IObserver, ISubject {
 }
 
 interface IObserver {
-  update() : void;
+  update(parser : FormulaParser) : void;
 }
 
 interface ISubject {
   attach(observer : IObserver) : void;
   detach(observer : IObserver) : void;
-  notifyObservers() : void;
+  notifyObservers(parser : FormulaParser) : void;
 }

@@ -16,14 +16,14 @@ export class SpreadsheetModel implements ISpreadsheetModel{
   private numColumns;
   private numRows;
 
-  private parser : FormulaParser;
+  private readonly parser : FormulaParser;
 
   constructor() {
     this.cellMap = new Map<string, Cell>();
     this.cellDependencies = new Map<CellReference, CellReference[]>();
     this.numColumns = 12;
     this.numRows = 25;
-    this.parser = new FormulaParser();
+    this.parser = new FormulaParser(this);
     this.initializeCells();
   }
 
@@ -38,19 +38,11 @@ export class SpreadsheetModel implements ISpreadsheetModel{
     }
   }
 
-  getCellFormula(reference: CellReference): string {
-    return this.getCell(reference).getFormula();
-  }
+  getCellFormula(reference: CellReference): string {return this.getCell(reference).getFormula();}
+  getCellStyle(reference: CellReference): CellStyle {return this.getCell(reference).getStyle();}
+  getCellValue(reference: CellReference): string {return this.getCell(reference).getValue() + "";}
 
-  getCellStyle(reference: CellReference): CellStyle {
-    return this.getCell(reference).getStyle();
-  }
-
-  getCellValue(reference: CellReference): string {
-    return this.getCell(reference).getValue() + "";
-  }
-
-  private getCell(reference : CellReference) : Cell {
+  getCell(reference : CellReference) : Cell {
     if (this.cellMap.has(reference.toString())) {
       let val = this.cellMap.get(reference.toString());
       if (val) {
@@ -135,17 +127,12 @@ export class SpreadsheetModel implements ISpreadsheetModel{
   }
 
   clearCell(reference: CellReference): void {
-    this.validateCellReference(reference);
-    this.cellMap.set(reference.toString(), new Cell());
-    this.cellDependencies.set(reference, []);
+    this.updateCellFormula(reference, "");
   }
 
   updateCellFormula(reference: CellReference, formula: string): void {
     this.validateCellReference(reference);
-    let value = this.parser.parseFormula(formula, this, reference);
-
-    this.cellMap.get(reference.toString())?.setFormula(formula);
-    this.cellMap.get(reference.toString())?.setValue(value);
+    this.cellMap.get(reference.toString())?.setFormula(formula, this.parser);
   }
 
   updateCellStyle(reference: CellReference, style: CellStyle): void {
