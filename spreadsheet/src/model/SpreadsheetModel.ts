@@ -113,7 +113,7 @@ export class SpreadsheetModel implements ISpreadsheetModel{
   }
 
   removeColumn(columnLetter: string): void {
-    if (this.numColumns == 1) {
+    if (this.numColumns === 1) {
       return;
     }
 
@@ -139,7 +139,7 @@ export class SpreadsheetModel implements ISpreadsheetModel{
   }
 
   removeRow(rowIndex: number): void {
-    if (this.numRows == 1) {
+    if (this.numRows === 1) {
       return;
     }
 
