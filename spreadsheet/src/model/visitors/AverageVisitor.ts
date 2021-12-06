@@ -2,6 +2,7 @@ import {ISpreadsheetModel} from "../ISpreadsheetModel";
 import {SumVisitor} from "./SumVisitor";
 import {AbstractVisitor} from "./AbstractVisitor";
 
+// Visitor to compute the average of a range of cells
 export class AverageVisitor extends AbstractVisitor {
 
   visitModel(model: ISpreadsheetModel): void {

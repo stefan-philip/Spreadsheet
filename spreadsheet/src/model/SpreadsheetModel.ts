@@ -9,6 +9,7 @@ import {CellReference} from "./CellReference";
 import {RangeExpression} from "./RangeExpression";
 import {CellStyle} from "./CellStyle";
 
+// Implementation of a spreadsheet model
 export class SpreadsheetModel implements ISpreadsheetModel{
   private cellMap : Map<string, Cell>;
   private numColumns;
@@ -51,8 +52,12 @@ export class SpreadsheetModel implements ISpreadsheetModel{
   getNumberOfColumns(): number {return this.numColumns;}
   getNumberOfRows(): number {return this.numRows}
 
+  // Accept method for visitor pattern
   accept(visitor: SpreadsheetModelVisitor): void {visitor.visitModel(this);}
 
+  // Adds column to the left of the given column letter
+  // Shifts columns to the right over by 1
+  // Updates cell values
   addColumnToLeft(columnIndex: string): void {
     const colNum = letterToColumnIndex(columnIndex);
 
@@ -85,6 +90,9 @@ export class SpreadsheetModel implements ISpreadsheetModel{
     this.updateCellValues();
   }
 
+  // Adds row above the given row number
+  // Shifts rows down by 1
+  // Updates cell values
   addRowAbove(rowIndex: number): void {
     if (rowIndex < 1 || rowIndex > this.numRows) {
       throw new Error("Invalid row index");
@@ -112,6 +120,9 @@ export class SpreadsheetModel implements ISpreadsheetModel{
     this.updateCellValues();
   }
 
+  // Removes specified column
+  // Shifts columns to the right to the left by 1
+  // Updates cell values
   removeColumn(columnLetter: string): void {
     if (this.numColumns === 1) {
       return;
@@ -138,6 +149,9 @@ export class SpreadsheetModel implements ISpreadsheetModel{
     this.updateCellValues();
   }
 
+  // Removes specified row
+  // shifts rows up
+  // updates dependencies
   removeRow(rowIndex: number): void {
     if (this.numRows === 1) {
       return;

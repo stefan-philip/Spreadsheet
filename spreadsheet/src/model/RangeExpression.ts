@@ -1,23 +1,20 @@
 import {CellReference} from "./CellReference";
 import {letterToColumnIndex} from "../util/utils";
 
+// Represents a range of cells
 export class RangeExpression {
-  private startRef: CellReference;
-  private endRef: CellReference;
+  private readonly startRef: CellReference;
+  private readonly endRef: CellReference;
 
   constructor(startRef: CellReference, endRef: CellReference) {
     this.startRef = startRef;
     this.endRef = endRef;
   }
 
-  getStartRef(): CellReference {
-    return this.startRef;
-  }
+  getStartRef(): CellReference {return this.startRef;}
+  getEndRef(): CellReference {return this.endRef;}
 
-  getEndRef(): CellReference {
-    return this.endRef;
-  }
-
+  // Creates a range given a range String ex. "A1..B3"
   static createRangeExpression(rangeString: string): RangeExpression {
     if (!rangeString.includes("..")) {
       throw new Error("Invalid range expression");

@@ -2,6 +2,7 @@ import {ISpreadsheetModel} from "../ISpreadsheetModel";
 import { create, all } from 'mathjs'
 import {AbstractVisitor} from "./AbstractVisitor";
 
+// Visitor to compute the sum of a range of cells
 export class SumVisitor extends AbstractVisitor {
 
   visitModel(model: ISpreadsheetModel): void {

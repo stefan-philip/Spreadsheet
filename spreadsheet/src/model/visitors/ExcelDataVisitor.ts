@@ -3,6 +3,7 @@ import {ISpreadsheetModel} from "../ISpreadsheetModel";
 import {columnIndexToLetter} from "../../util/utils";
 import {CellReference} from "../CellReference";
 
+// Visitor to format spreadsheet data into export-ready data
 export class ExcelDataVisitor implements SpreadsheetModelVisitor {
   private readonly result : any[];
 
