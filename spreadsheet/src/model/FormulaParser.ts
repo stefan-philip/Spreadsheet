@@ -101,8 +101,18 @@ export class FormulaParser {
 
     let formulaCopy = this.replaceAllReferences(formula);
     formulaCopy = this.replaceAllFunctions(formulaCopy);
-    let res = math.evaluate(formulaCopy);
-    return res !== undefined ? res : "wrong";
+
+    if (/^[ ()\[\]0-9+\-*.\/]*$/.test(formulaCopy)) {
+      let res = math.evaluate(formulaCopy);
+      return res !== undefined ? res : "wrong";
+    }
+
+    // may be string addition
+    if (formulaCopy.includes("+") && !/\d/.test(formulaCopy)) {
+      let split = formulaCopy.split("+");
+      return split.join("");
+    }
+    return formulaCopy;
   }
 
   private replaceAllFunctions(formula : string) : string {
