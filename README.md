@@ -17,7 +17,7 @@ Cell formulas can be changed by selecting the desired cell, writing a formula in
 
 Cells (and their dependencies) should be updated once the Enter button on the UI is clicked.
 
-###Supported Formula Functions
+### Supported Formula Functions
 * Mathematical Expressions
     * ex. 2 + 3(2+3) as a formula will evaluate to 17
     
@@ -36,7 +36,7 @@ Cells (and their dependencies) should be updated once the Enter button on the UI
 * PROD(range) computes the product of the cells in the range
     * ex. PROD(A1..B2) computes the product of the cells in the range A1..B2
     
-###Spreadsheet Functions
+### Spreadsheet Functions
 * Cells can be cleared with the Clear button, which will clear the cell formula
 * Rows can be added above a selected row with the Add Row button
 * Columns can be added above a selected column with the Add Column button
