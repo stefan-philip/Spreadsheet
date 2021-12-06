@@ -18,13 +18,16 @@ export class Cell implements IObserver, ISubject {
   }
 
   setFormula(formula : string, parser : FormulaParser) : void {
+    // these two should throw error before we do any changes
+    parser.parseFormula(this.formula);
+    let cellsReferencedTo = parser.getReferencedCells(formula);
+
 
     this.dependents.forEach((cell) => {
       cell.detach(this);
     })
 
     this.formula = formula;
-    let cellsReferencedTo = parser.getReferencedCells(formula);
 
     cellsReferencedTo.forEach((cell) => {
       cell.attach(this);
